@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import authController from './controllers/authController.js';
 
 const app = express();
@@ -31,5 +33,15 @@ app.put('/api/medicoes/:id', authController.updateMedicao);
 
 // Rota para importar medidas
 app.post('/api/importar-medidas', authController.importarMedidas);
+
+// Configuração para servir os arquivos estáticos gerados pelo Vite
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Ajuste o caminho se necessário (aqui, assume que a pasta 'dist' está no diretório raiz do projeto)
+app.use(express.static(path.join(__dirname, '../')));
+
+// Rota catch-all para retornar o index.html em qualquer rota não reconhecida
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../', 'index.html'));
+});
 
 export default app;

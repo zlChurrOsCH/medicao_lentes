@@ -10,16 +10,19 @@ import Navbar from './componentes/Navbar/Navbar';
 const App = () => {
   return (
     <div>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/medicao" element={<Medicao />} />
-        <Route path="/medicao/:usuario" element={<Medicao />} />
-        <Route path="/historico" element={<Historico />} />
-        <Route path="/historico/:usuario" element={<Historico />} />
-        <Route path="/perfil" element={<Perfil />} />
-      </Routes>
+      <router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/medicao" element={<Medicao />} />
+          <Route path="/medicao/:usuario" element={<Medicao />} />
+          <Route path="/historico" element={<Historico />} />
+          <Route path="/historico/:usuario" element={<Historico />} />
+          <Route path="/perfil" element={<Perfil />} />
+        </Routes>
+      </router>
     </div>
   );
 };
