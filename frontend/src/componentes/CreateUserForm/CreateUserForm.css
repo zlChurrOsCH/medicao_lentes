@@ -1,0 +1,75 @@
+.create-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.form-collumn-left {
+  width: 20%;
+}
+
+.form-collumn-left input {
+  width: 92%;
+}
+
+.form-input {
+  flex: 1;
+  min-width: 20%;
+}
+
+input.form-lenteAmaior, input.form-lenteBmaior{
+  width: 50% !important;
+}
+
+.form-button {
+  align-self: flex-start;
+}
+
+.form-collumn-left {
+    width: 19%;
+}
+
+input.lenteAXeps, input.lenteBXeps, input.lenteAXcliente, input.lenteBXcliente, input.lenteAYeps, input.lenteBYeps, input.lenteAYcliente, input.lenteBYcliente {
+    width: 25% !important;
+}
+
+input.form-lenteAmaior, input.form-lenteBmaior {
+    width: 50% !important;
+}
+
+.form-medidas-row-1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.form-medidas-row-2 {
+  display: flex;
+  gap: 0 10px;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.right-collumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 79%;
+}
+
+.form-newuser {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 10px;
+}

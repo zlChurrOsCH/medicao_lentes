@@ -1,0 +1,74 @@
+.medicao-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.medicao-form .lente {
+  margin-bottom: 20px;
+}
+
+.medicao-form .lente-block {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.medicao-form .lente h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.medicao-form .circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.medicao-form input {
+  width: calc(50% - 10px);
+  margin-right: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.medicao-form input.filled {
+  border-color: green;
+}
+
+.medicao-form input.empty {
+  border-color: red;
+}
+
+.medicao-form button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.medicao-form button:hover {
+  background-color: #0056b3;
+}
+
+.medicao-form .message {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #d9534f;
+}

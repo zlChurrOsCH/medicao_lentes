@@ -1,0 +1,144 @@
+.perfil-container {
+  max-width: 80%;
+  margin: 2% auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.perfil-container h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.perfil-container form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.perfil-container form input {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.perfil-container form button {
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.perfil-container form button:hover {
+  background-color: #0056b3;
+}
+
+.perfil-container button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.perfil-container button:hover {
+  background-color: #218838;
+}
+
+.perfil-container p {
+  font-size: 16px;
+  color: #666;
+}
+
+.create-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.form-collumn-left {
+  width: 20%;
+}
+
+.form-collumn-left input {
+  width: 92%;
+}
+
+.form-input {
+  flex: 1;
+  min-width: 20%;
+}
+
+input.form-lenteAmaior, input.form-lenteBmaior{
+  width: 50% !important;
+}
+
+.form-button {
+  align-self: flex-start;
+}
+
+.form-collumn-left {
+    width: 19%;
+}
+
+input.lenteAXeps, input.lenteBXeps, input.lenteAXcliente, input.lenteBXcliente, input.lenteAYeps, input.lenteBYeps, input.lenteAYcliente, input.lenteBYcliente {
+    width: 25% !important;
+}
+
+input.form-lenteAmaior, input.form-lenteBmaior {
+    width: 50% !important;
+}
+
+.form-medidas-row-1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.form-medidas-row-2 {
+  display: flex;
+  gap: 0 10px;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.right-collumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 79%;
+}
+
+.form-newuser {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 10px;
+}
