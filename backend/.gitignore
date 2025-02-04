@@ -1,0 +1,83 @@
+# Arquivos e diretórios do Node.js
+node_modules/
+package-lock.json # ou yarn.lock, pnpm-lock.yaml
+
+
+# Arquivos de build
+dist/
+dist-ssr/
+*.local
+build/
+.vite/
+
+# Arquivos de configuração sensíveis
+.env
+
+# Arquivos de log
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Arquivos temporários do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos específicos do editor (se aplicável)
+.idea/
+.vscode/
+.vscode/*
+*.swp # Arquivos de swap do Vim
+*~ # Arquivos de backup
+~$* # Arquivos temporários do Word/Excel
+!.vscode/extensions.json
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+# Outros arquivos/diretórios que você pode querer ignorar
+public/importarDados.xlsx   # Se forem dados sensíveis e não devem ir para o repositório
+public/Pasta1.csv          # Se forem dados sensíveis e não devem ir para o repositório
+
+# Se você usa algum sistema de cache, adicione aqui
+.cache/
+
+# Arquivos específicos do frontend
+frontend/node_modules/
+frontend/package-lock.json 
+frontend/dist/
+frontend/.vite/
+
+# Arquivos específicos do backend
+backend/node_modules/
+backend/package-lock.json
+
+# Se você usa Docker
+docker-compose.override.yml
+.dockerenv
+
+# Arquivos de teste
+__pycache__/
+*.test.js
+*.spec.js
+
+# Arquivos de cobertura de código
+coverage/
+.nyc_output/
+
+# Arquivos de pacotes (se aplicável)
+*.tgz
+*.zip
+*.rar
+
+# Arquivos específicos do seu projeto (adicione conforme necessário)
+# Exemplo:
+# config.js
+# data/
