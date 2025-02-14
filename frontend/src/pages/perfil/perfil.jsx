@@ -16,7 +16,7 @@ const Perfil = () => {
   // obter dados do usuário
   useFetchUserData(setUser, navigate);
   
-    useEffect(() => {
+  useEffect(() => {
     console.log('User state:', user);
   }, [user]);
 
@@ -49,7 +49,6 @@ const Perfil = () => {
               <h3>Opções do Usuário</h3>
               <button onClick={() => navigate('/medicao')}>Adicionar Medidas</button>
               {/* Adicione mais detalhes do usuário aqui */}
-              <h3>Medições</h3>
             </div>
           )}
           <HistoricoTable userId={user.username} isAdmin={user.isAdmin} />

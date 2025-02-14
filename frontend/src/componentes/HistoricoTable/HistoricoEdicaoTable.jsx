@@ -58,10 +58,10 @@ const HistoricoEdicaoTable = ({ editData, setEditData, handleSave, isAdmin }) =>
                         </label>
                         {isAdmin && (
                             <>
-                                <label>
+                                {/* <label>
                                     Armação:<br />
                                     <input type="text" value={editData.armacao} onChange={(e) => setEditData({ ...editData, armacao: e.target.value })} />
-                                </label>
+                                </label> */}
                                 <label>
                                     Tolerância:<br />
                                     <input type="text" value={editData.tolerancia} onChange={(e) => setEditData({ ...editData, tolerancia: e.target.value })} />

@@ -36,3 +36,37 @@
 .historico-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
+.btn-acoes button {
+  padding: 10px 20px;
+  display: inline-flex;
+  width: 48%;
+  justify-content: center;
+}
+
+.btn-acao button {
+  padding: 10px 20px;
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.export-button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  width: 15%;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.export-button:hover {
+  background-color: #45a049;
+}

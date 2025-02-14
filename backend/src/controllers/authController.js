@@ -2,6 +2,8 @@ import 'dotenv/config'; // Carregar variáveis de ambiente do arquivo .env
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+// import { parse as json2csv } from 'json2csv'; // Temporarily disable CSV export
+import { js2xml } from 'xml-js';
 
 const authController = {
   // Função de login
@@ -17,7 +19,16 @@ const authController = {
 
       // Gerar token JWT
       const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      res.json({ token, user: { id: user.id, username: user.usuario, isAdmin: user.isAdmin } });
+      res.json({ 
+        token, 
+        user: { 
+          id: user.id, 
+          username: user.usuario, 
+          nome: user.nome, 
+          sobrenome: user.sobrenome, 
+          isAdmin: user.isAdmin 
+        } 
+      });
     } catch (error) {
       console.error('Erro no login:', error);
       res.status(500).json({ message: 'Erro ao realizar o login. Por favor, tente novamente mais tarde.' }); 
@@ -137,6 +148,82 @@ const authController = {
     } catch (error) {
       console.error('Erro ao importar medidas:', error);
       res.status(500).json({ message: 'Erro ao importar medidas. Por favor, tente novamente mais tarde.' });
+    }
+  },
+
+  async exportAllData(req, res) {
+    const format = req.query.format || 'json';
+    try {
+      const allData = await User.getAllData();
+      // Temporarily disable CSV export
+      // if (format === 'csv') {
+      //   const csv = json2csv(allData);
+      //   res.header('Content-Type', 'text/csv');
+      //   res.attachment('all_data.csv');
+      //   return res.send(csv);
+      // } else 
+      if (format === 'xml') {
+        const xml = js2xml({ root: allData }, { compact: true, ignoreComment: true, spaces: 4 });
+        res.header('Content-Type', 'application/xml');
+        res.attachment('all_data.xml');
+        return res.send(xml);
+      } else {
+        res.json(allData);
+      }
+    } catch (error) {
+      console.error('Erro ao exportar todos os dados:', error);
+      res.status(500).json({ message: 'Erro ao exportar todos os dados. Por favor, tente novamente mais tarde.' });
+    }
+  },
+
+  async exportCurrentData(req, res) {
+    const format = req.query.format || 'json';
+    try {
+      const currentData = await User.getCurrentData();
+      // Temporarily disable CSV export
+      // if (format === 'csv') {
+      //   const csv = json2csv(currentData);
+      //   res.header('Content-Type', 'text/csv');
+      //   res.attachment('current_data.csv');
+      //   return res.send(csv);
+      // } else 
+      if (format === 'xml') {
+        const xml = js2xml({ root: currentData }, { compact: true, ignoreComment: true, spaces: 4 });
+        res.header('Content-Type', 'application/xml');
+        res.attachment('current_data.xml');
+        return res.send(xml);
+      } else {
+        res.json(currentData);
+      }
+    } catch (error) {
+      console.error('Erro ao exportar dados atuais:', error);
+      res.status(500).json({ message: 'Erro ao exportar dados atuais. Por favor, tente novamente mais tarde.' });
+    }
+  },
+
+  async exportClientData(req, res) {
+    const format = req.query.format || 'json';
+    const clientId = req.params.id;
+    try {
+      const clientData = await User.getClientData(clientId);
+      // CSV Desativado temporariamente
+      // if (format === 'csv') {
+      //   const csv = json2csv(clientData);
+      //   res.header('Content-Type', 'text/csv');
+      //   res.attachment(`client_${clientId}_data.csv`);
+      //   return res.send(csv);
+      // } else 
+      if (format === 'xml') {
+        const xml = js2xml({ root: clientData }, { compact: true, ignoreComment: true, spaces: 4 });
+        res.header('Content-Type', 'application/xml');
+        res.attachment(`client_${clientId}_data.xml`);
+        return res.send(xml);
+      } else {
+        res.json(clientData);
+      }
+    } catch (error) {
+      console.error('Erro ao exportar dados do cliente:', error);
+      res.status(500).json({ message: 'Erro ao exportar dados do cliente. Por favor, tente novamente mais tarde.' });
     }
   }
 };

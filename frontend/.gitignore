@@ -1,6 +1,7 @@
 # Arquivos e diretórios do Node.js
 node_modules/
 package-lock.json # ou yarn.lock, pnpm-lock.yaml
+.info
 
 
 # Arquivos de build

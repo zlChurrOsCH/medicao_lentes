@@ -101,57 +101,122 @@ const HistoricoTable = ({ userId, isAdmin }) => {
     return '';
   };
 
+  const exportData = async (option, format = 'json', clientId = null) => {
+    let url;
+    switch (option) {
+      case 'all':
+        url = `http://localhost:5000/api/export/all?format=${format}`;
+        break;
+      case 'current':
+        url = `http://localhost:5000/api/export/current?format=${format}`;
+        break;
+      case 'client':
+        url = `http://localhost:5000/api/export/client/${clientId}?format=${format}`;
+        break;
+      default:
+        return;
+    }
+  
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.text();
+      const blob = new Blob([data], { type: format === 'json' ? 'application/json' : format === 'csv' ? 'text/csv' : 'application/xml' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${option}_data.${format}`;
+      link.click();
+    } catch (error) {
+      console.error('Erro ao exportar dados:', error);
+    }
+  };
+  
+  const handleExport = () => {
+    const option = prompt('Escolha uma opção: \n1. Exportar tudo \n2. Exportar Atuais \n3. Exportar cliente X');
+    const format = prompt('Escolha o formato: \n1. JSON \n2. XML');
+    let formatOption = 'json';
+    if (format === '2') {
+      formatOption = 'xml';
+    }
+    if (option === '1') {
+      exportData('all', formatOption);
+    } else if (option === '2') {
+      exportData('current', formatOption);
+    } else if (option === '3') {
+      const clientId = prompt('Digite o ID do cliente:');
+      exportData('client', formatOption, clientId);
+    }
+  };
+
   return (
     <div className="historico-table-container">
-      <h3>Histórico de Medições</h3>
-      <input
-        type="text"
-        className="search-input"
-        placeholder="Pesquisar..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      {isAdmin ? (
+        <>
+        <h3>Histórico de Medições</h3>
+        <div className="header-actions">
+          <input type="text" className="search-input" placeholder="Pesquisar..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          <button className="export-button" onClick={handleExport}>Exportar Dados</button>
+        </div>
+        </>
+      ) : (<h3>MEUS PEDIDOS</h3>)}
       <table className="historico-table">
         <thead>
           <tr>
             <th onClick={() => handleSort('cliente_id')}>Código do Cliente {getSortIndicator('cliente_id')}</th>
-            <th>Lente A {isAdmin ? '' : `(${historico[0]?.lente_a_maior})`} | EPS {getSortIndicator('lente_a_maior')}</th>
-            <th>Lente B {isAdmin ? '' : `(${historico[0]?.lente_b_menor})`} | EPS {getSortIndicator('lente_b_menor')}</th>
-            <th>Lente A {isAdmin ? '' : `(${historico[0]?.lente_a_maior})`} | Cliente {getSortIndicator('lente_a_maior')}</th>
-            <th>Lente B {isAdmin ? '' : `(${historico[0]?.lente_b_menor})`} | Cliente {getSortIndicator('lente_b_menor')}</th>
-            <th onClick={() => handleSort('armacao')}>Armação {getSortIndicator('armacao')}</th>
+            {isAdmin ? (
+              <>
+              <th onClick={() => handleSort('lente_a_maior')}>Lente A Maior | EPS{getSortIndicator('lente_a_maior')}</th>
+              <th onClick={() => handleSort('lente_b_menor')}>Lente B Menor | EPS{getSortIndicator('lente_b_menor')}</th>
+              <th onClick={() => handleSort('lente_a_maior')}>Lente A Maior | Cliente {getSortIndicator('lente_a_maior')}</th>
+              <th onClick={() => handleSort('lente_b_menor')}>Lente B Menor | Cliente {getSortIndicator('lente_b_menor')}</th>
+              </>
+            ) : (
+              <>
+              <th>Lente A ({historico[0]?.lente_a_maior}) | EPS</th>
+              <th>Lente B ({historico[0]?.lente_b_menor}) | EPS</th>
+              </>
+            )}
+            
+            {/* <th onClick={() => handleSort('armacao')}>Armação {getSortIndicator('armacao')}</th> */}
             <th>Tolerância {getSortIndicator('tolerancia')}</th>
-            {isAdmin && <th>Ações</th>}
+            {isAdmin ? <th>Ações</th> : <th>Ação</th>}
           </tr>
         </thead>
         <tbody>
           {sortedHistorico.map((medicao, index) => (
             <tr key={index}>
               <td>{medicao.cliente_id}</td>
-              {isAdmin && (
+              {isAdmin ? (
                 <>
                   <td>LENTE A MAIOR: {medicao.lente_a_maior}<br /> Medida X: {medicao.lente_a_x_eps}<br /> Medida Y: {medicao.lente_a_y_eps}</td>
                   <td>LENTE B MENOR: {medicao.lente_b_menor}<br /> Medida X: {medicao.lente_b_x_eps}<br /> Medida Y: {medicao.lente_b_y_eps}</td>
                   <td>LENTE A MAIOR: {medicao.lente_a_maior}<br /> Medida X: {medicao.lente_a_x_cliente}<br /> Medida Y: {medicao.lente_a_y_cliente}</td>
                   <td>LENTE B MENOR: {medicao.lente_b_menor}<br /> Medida X: {medicao.lente_b_x_cliente}<br /> Medida Y: {medicao.lente_b_y_cliente}</td>
                 </>
-              )}
-              {!isAdmin && (
+              ) : (
                 <>
-                  <td>Medida X: {medicao.lente_a_x_eps}<br /> Medida Y: {medicao.lente_a_y_eps}</td>
-                  <td>Medida X: {medicao.lente_b_x_eps}<br /> Medida Y: {medicao.lente_b_y_eps}</td>
                   <td>Medida X: {medicao.lente_a_x_cliente}<br /> Medida Y: {medicao.lente_a_y_cliente}</td>
                   <td>Medida X: {medicao.lente_b_x_cliente}<br /> Medida Y: {medicao.lente_b_y_cliente}</td>
                 </>
               )}
-              <td>{medicao.armacao}</td>
+              {/* <td>{medicao.armacao}</td> */}
               <td>{medicao.tolerancia}</td>
-              <td>
-                <button onClick={() => handleEdit(medicao)}>Editar</button>
-              </td>
-              <td>
+              {isAdmin ? (
+                <>
+                <td class="btn-acoes">
+                <button onClick={() => handleEdit(medicao)}>Editar</button> &nbsp;
                 <button onClick={() => handleHistorico(medicao)}>Histórico</button>
               </td>
+                </>
+              ) : (
+                <>
+                <td class="btn-acao">
+                <button onClick={() => handleEdit(medicao)}>Adicionar Medida</button>
+              </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>

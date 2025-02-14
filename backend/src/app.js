@@ -20,7 +20,7 @@ app.post('/api/login', authController.login);
 app.post('/api/criarusuario', authController.createUser);
 
 // Rota para obter o Histórico baseado no ID
-app.get('/api/historico/:id', authController.historicoUser)
+app.get('/api/historico/:id', authController.historicoUser);
 
 // Rota para obter todas as medições se o usuário for administrador
 app.get('/api/medicoes', authController.getAllMedicoes);
@@ -33,6 +33,15 @@ app.put('/api/medicoes/:id', authController.updateMedicao);
 
 // Rota para importar medidas
 app.post('/api/importar-medidas', authController.importarMedidas);
+
+// Rota para exportar todas as medições (atuais e históricas)
+app.get('/api/export/all', authController.exportAllData);
+
+// Rota para exportar apenas as medições atuais
+app.get('/api/export/current', authController.exportCurrentData);
+
+// Rota para exportar dados de um cliente específico
+app.get('/api/export/client/:id', authController.exportClientData);
 
 // Configuração para servir os arquivos estáticos gerados pelo Vite
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

@@ -40,6 +40,7 @@ const createUser = async (userData, medicaoData) => {
                 lente_a_x_cliente, lente_a_y_cliente, lente_b_menor, lente_b_x_eps,
                 lente_b_y_eps, lente_b_x_cliente, lente_b_y_cliente, armacao, tolerancia
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+
             [
                 clienteId, medicaoData.lente_a_maior, medicaoData.lente_a_x_eps,
                 medicaoData.lente_a_y_eps, medicaoData.lente_a_x_cliente,
@@ -125,6 +126,7 @@ const updateMedicao = async (medicaoId, updatedData) => {
                 lente_b_x_eps_old, lente_b_y_eps_old, lente_b_x_cliente_old, 
                 lente_b_y_cliente_old, armacao_old, tolerancia_old, atualizado_em
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+
             [
                 medicaoId, oldData[0].lente_a_maior, oldData[0].lente_a_x_eps, oldData[0].lente_a_y_eps,
                 oldData[0].lente_a_x_cliente, oldData[0].lente_a_y_cliente, oldData[0].lente_b_menor,
@@ -164,6 +166,38 @@ const saveMedicao = async (userId, medicaoData) => {
     }
 };
 
+const getAllData = async () => {
+    try {
+        const [medicoes] = await pool.query('SELECT * FROM medicoes');
+        const [historico] = await pool.query('SELECT * FROM medicoes_historico');
+        return { medicoes, historico };
+    } catch (error) {
+        console.error('Erro ao buscar todos os dados:', error);
+        throw error;
+    }
+};
+
+const getCurrentData = async () => {
+    try {
+        const [medicoes] = await pool.query('SELECT * FROM medicoes');
+        return medicoes;
+    } catch (error) {
+        console.error('Erro ao buscar dados atuais:', error);
+        throw error;
+    }
+};
+
+const getClientData = async (clientId) => {
+    try {
+        const [medicoes] = await pool.query('SELECT * FROM medicoes WHERE cliente_id = ?', [clientId]);
+        const [historico] = await pool.query('SELECT * FROM medicoes_historico WHERE medicao_id IN (SELECT id FROM medicoes WHERE cliente_id = ?)', [clientId]);
+        return { medicoes, historico };
+    } catch (error) {
+        console.error('Erro ao buscar dados do cliente:', error);
+        throw error;
+    }
+};
+
 const User = {
     // Função de login para verificar as credenciais do usuário
     async login (username, password) {
@@ -183,7 +217,10 @@ const User = {
     getAllMedicoes,
     updateMedicao,
     getMedicaoHistorico,
-    saveMedicao
+    saveMedicao,
+    getAllData,
+    getCurrentData,
+    getClientData
 };
 
 export default User;
