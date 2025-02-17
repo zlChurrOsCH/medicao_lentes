@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageWrapper from '../../componentes/PageWrapper/PageWrapper'; // Importe PageWrapper
+import API_URL from '../../config/apiConfig'; // Importe a URL da API
 import './login.css';
 
 const Login = () => {
@@ -32,7 +33,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/login', { // Certifique-se de que a URL está correta
+      const response = await fetch(`${API_URL}/login`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -4,13 +4,19 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import authController from './controllers/authController.js';
 
+// Configuração para servir os arquivos estáticos gerados pelo Vite
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+
 app.use(cors()); // Habilitar CORS
 app.use(express.json());
 
-// Rota de teste
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
+// Ajuste o caminho se necessário (aqui, assume que a pasta 'dist' está no diretório raiz do projeto)
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Rota catch-all para retornar o index.html em qualquer rota não reconhecida
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 // Rota para login
@@ -42,15 +48,5 @@ app.get('/api/export/current', authController.exportCurrentData);
 
 // Rota para exportar dados de um cliente específico
 app.get('/api/export/client/:id', authController.exportClientData);
-
-// Configuração para servir os arquivos estáticos gerados pelo Vite
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Ajuste o caminho se necessário (aqui, assume que a pasta 'dist' está no diretório raiz do projeto)
-app.use(express.static(path.join(__dirname, '../')));
-
-// Rota catch-all para retornar o index.html em qualquer rota não reconhecida
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../', 'index.html'));
-});
 
 export default app;

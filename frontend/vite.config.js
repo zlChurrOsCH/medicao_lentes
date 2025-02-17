@@ -11,11 +11,12 @@ export default defineConfig({
   root,
   plugins: [react(), Pages()],
   build: {
+    // base: "/public/",
     outDir,
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(root, 'main.jsx'),
+        main: resolve(root, 'index.html'),
         Perfil: resolve(root, 'pages', 'perfil', 'index.html'),
         Medicao: resolve(root, 'pages', 'medicao', 'index.html'),
         Login: resolve(root, 'pages', 'login', 'index.html')
