@@ -1,44 +1,115 @@
+body{
+  background-color: #f9f9f9 !important;
+}
+
 .medicao-form {
-  max-width: 600px;
+  max-width: 100%;
+  gap: 1em 3em;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .medicao-form .lente {
   margin-bottom: 20px;
+  text-align: -webkit-center;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-preenchimento{
+  display:flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.eixo{
+  display: flex;
+  gap: 10px;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .medicao-form .lente-block {
-  margin-bottom: 20px;
-  padding: 20px;
+  margin-bottom: 2em;
+  padding: 1.5em;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 20px;
   background-color: #fff;
+  width: 40%;
+  display: flex;
+  align-items:stretch;
+  justify-content: center;
+  box-shadow: 3px 3px 12px 0px rgb(0 0 0 / 15%);
 }
 
 .medicao-form .lente h2 {
   font-size: 20px;
-  margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 1em;
   color: #333;
 }
 
-.medicao-form .circle {
-  width: 100px;
-  height: 100px;
+/* Bolinha na ponta direita do raio */
+.ponta-raio {
+  width: 8px; /* Tamanho da bolinha */
+  height: 8px;
+  background-color: blue; /* Cor da bolinha (igual ao raio) */
+  border-radius: 50%; /* Forma circular */
+  position: absolute;
+  right: 0; /* Fixa na extremidade direita do raio */
+  top: 50%;
+  transform: translate(50%, -50%); /* Ajusta a posição ao centro da linha */
+}
+
+.medicao-form .circle_large {
+  width: 220px;
+  height: 220px;
+  padding-bottom: 1.3em;
+  margin: 0 0 1.5em 0;
   border-radius: 50%;
   background-color: #e0e0e0;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  position: relative; /* Necessário para posicionamento do raio */
 }
+.medicao-form .circle_small {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  padding-bottom: 1.3em;
+  margin: 0 0 1.5em 0;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* Necessário para posicionamento do raio */
+}
+
+.raio {
+  position: absolute;
+  height: 2px; /* Espessura do traço */
+  background-color: blue; /* Cor do raio */
+  top: 50%;
+  left: 0;
+  transform-origin: right center; /* Faz a rotação ocorrer a partir do centro */
+}
+
+
 
 .medicao-form input {
   width: calc(50% - 10px);
-  margin-right: 10px;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -56,6 +127,7 @@
 .medicao-form button {
   padding: 10px 20px;
   font-size: 16px;
+  width: 20%;
   color: #fff;
   background-color: #007bff;
   border: none;

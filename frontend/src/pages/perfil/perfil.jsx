@@ -47,7 +47,7 @@ const Perfil = () => {
           ) : (
             <div>
               <h3>Opções do Usuário</h3>
-              <button onClick={() => navigate('/medicao')}>Adicionar Medidas</button>
+              {/* <button onClick={() => navigate('/medicao')}>Adicionar Medidas</button> */}
               {/* Adicione mais detalhes do usuário aqui */}
             </div>
           )}

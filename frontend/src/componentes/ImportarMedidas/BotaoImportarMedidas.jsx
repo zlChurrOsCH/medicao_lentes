@@ -1,5 +1,6 @@
 import React from 'react';
 import Papa from 'papaparse';
+import API_URL from '../../config/apiConfig';
 
 const BotaoImportarMedidas = () => {
   const handleFileUpload = async (event) => {
@@ -37,7 +38,7 @@ const BotaoImportarMedidas = () => {
 
   const importarMedidas = async (data) => {
     try {
-      const response = await fetch('http://localhost:5000/api/importar-medidas', {
+      const response = await fetch(`${API_URL}/api/importar-medidas`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,3 +1,7 @@
+form * {
+    box-sizing: border-box; /* Garante que padding e bordas não afetem a largura */
+}
+
 .auth-form {
     display: flex;
     max-width: 400px;

@@ -225,6 +225,24 @@ const authController = {
       console.error('Erro ao exportar dados do cliente:', error);
       res.status(500).json({ message: 'Erro ao exportar dados do cliente. Por favor, tente novamente mais tarde.' });
     }
+  },
+
+  // Função para salvar medições fornecidas pelo cliente
+  async saveMedicaoCliente(req, res) {
+    const userId = req.params.id;
+    const { lenteA, lenteB } = req.body;
+
+    try {
+      const success = await User.saveMedicaoCliente(userId, lenteA, lenteB);
+      if (success) {
+        res.json({ message: 'Medidas salvas com sucesso.' });
+      } else {
+        res.status(400).json({ message: 'Erro ao salvar medidas.' });
+      }
+    } catch (error) {
+      console.error('Erro ao salvar medição do cliente:', error);
+      res.status(500).json({ message: 'Erro ao salvar medição do cliente. Por favor, tente novamente mais tarde.' });
+    }
   }
 };
 

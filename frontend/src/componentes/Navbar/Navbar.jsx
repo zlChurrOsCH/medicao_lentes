@@ -14,7 +14,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn'); // Remova o estado de login
+    localStorage.clear(); // Limpa todo o cache do localStorage
     navigate('/login'); // Redirecione para a página de login
   };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import './CreateUserForm.css';
+import API_URL from '../../config/apiConfig';
 
 const CreateUserForm = () => {
   const handleCreateUser = async (event) => {
@@ -29,7 +30,7 @@ const CreateUserForm = () => {
     };
   
     try {
-      const response = await fetch('http://localhost:5000/api/criarusuario', {
+      const response = await fetch(`${API_URL}/criarusuario`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

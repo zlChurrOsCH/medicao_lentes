@@ -99,7 +99,7 @@ const updateMedicao = async (medicaoId, updatedData) => {
     try {
         await connection.beginTransaction();
 
-        const [oldData] = await connection.query('SELECT * FROM medicoes WHERE id = ?', [medicaoId]);
+        const [oldData] = await connection.query('SELECT * FROM medicoes WHERE cliente_id = ?', [medicaoId]);
         if (oldData.length === 0) {
             throw new Error('Medição não encontrada');
         }
@@ -110,7 +110,7 @@ const updateMedicao = async (medicaoId, updatedData) => {
                 lente_a_x_cliente = ?, lente_a_y_cliente = ?, lente_b_menor = ?, 
                 lente_b_x_eps = ?, lente_b_y_eps = ?, lente_b_x_cliente = ?, 
                 lente_b_y_cliente = ?, armacao = ?, tolerancia = ?, atualizado_em = NOW() 
-            WHERE id = ?`,
+            WHERE cliente_id = ?`,
             [
                 updatedData.lente_a_maior, updatedData.lente_a_x_eps, updatedData.lente_a_y_eps,
                 updatedData.lente_a_x_cliente, updatedData.lente_a_y_cliente, updatedData.lente_b_menor,
@@ -131,7 +131,7 @@ const updateMedicao = async (medicaoId, updatedData) => {
                 medicaoId, oldData[0].lente_a_maior, oldData[0].lente_a_x_eps, oldData[0].lente_a_y_eps,
                 oldData[0].lente_a_x_cliente, oldData[0].lente_a_y_cliente, oldData[0].lente_b_menor,
                 oldData[0].lente_b_x_eps, oldData[0].lente_b_y_eps, oldData[0].lente_b_x_cliente,
-                oldData[0].lente_b_y_cliente, oldData[0].armacao, oldData[0].tolerancia, oldData[0].atualizado_em
+                oldData[0].lente_b_y_cliente, oldData[0].armacao, oldData[0].tolerancia, new Date()
             ]
         );
 
@@ -162,6 +162,27 @@ const saveMedicao = async (userId, medicaoData) => {
         return result.affectedRows > 0;
     } catch (error) {
         console.error('Erro ao salvar medição:', error);
+        throw error;
+    }
+};
+
+// Função para salvar medições fornecidas pelo cliente
+const saveMedicaoCliente = async (userId, lenteA, lenteB) => {
+    try {
+        const [result] = await pool.query(
+            `UPDATE medicoes SET 
+                lente_a_x_cliente = ?, lente_a_y_cliente = ?, 
+                lente_b_x_cliente = ?, lente_b_y_cliente = ? 
+            WHERE cliente_id = ?`,
+            [
+                lenteA.x_cliente, lenteA.y_cliente,
+                lenteB.x_cliente, lenteB.y_cliente,
+                userId
+            ]
+        );
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error('Erro ao salvar medição do cliente:', error);
         throw error;
     }
 };
@@ -218,6 +239,7 @@ const User = {
     updateMedicao,
     getMedicaoHistorico,
     saveMedicao,
+    saveMedicaoCliente,
     getAllData,
     getCurrentData,
     getClientData

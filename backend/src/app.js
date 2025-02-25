@@ -11,14 +11,6 @@ const app = express();
 app.use(cors()); // Habilitar CORS
 app.use(express.json());
 
-// Ajuste o caminho se necessário (aqui, assume que a pasta 'dist' está no diretório raiz do projeto)
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// Rota catch-all para retornar o index.html em qualquer rota não reconhecida
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
 // Rota para login
 app.post('/api/login', authController.login);
 
@@ -34,6 +26,9 @@ app.get('/api/medicoes', authController.getAllMedicoes);
 // Rota para obter o histórico de uma medição
 app.get('/api/medicoes/historico/:id', authController.getMedicaoHistorico);
 
+// Rota para atualizar visão cliente
+app.put('/api/medicoes/cliente/:id', authController.saveMedicaoCliente);
+
 // Rota para atualizar uma medição
 app.put('/api/medicoes/:id', authController.updateMedicao);
 
@@ -48,5 +43,13 @@ app.get('/api/export/current', authController.exportCurrentData);
 
 // Rota para exportar dados de um cliente específico
 app.get('/api/export/client/:id', authController.exportClientData);
+
+// Ajuste o caminho se necessário (aqui, assume que a pasta 'dist' está no diretório raiz do projeto)
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Rota catch-all para retornar o index.html em qualquer rota não reconhecida
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 export default app;

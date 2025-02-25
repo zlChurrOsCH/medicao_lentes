@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import './HistoricoTable.css';
+import { useNavigate } from 'react-router-dom';
 import HistoricoEdicaoTable from './HistoricoEdicaoTable';
 import HistoricoModal from './HistoricoModal';
+import API_URL from '../../config/apiConfig'
+import './HistoricoTable.css';
 
 const HistoricoTable = ({ userId, isAdmin }) => {
   const [historico, setHistorico] = useState([]);
@@ -10,16 +12,25 @@ const HistoricoTable = ({ userId, isAdmin }) => {
   const [showHistoricoModal, setShowHistoricoModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'cliente_id', direction: 'descending' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHistorico = async () => {
       try {
-        const url = isAdmin ? 'http://localhost:5000/api/medicoes' : `http://localhost:5000/api/historico/${userId}`;
+        const url = isAdmin ? (`${API_URL}/medicoes`) : (`${API_URL}/historico/${userId}`);
         const response = await fetch(url);
-        const data = await response.json();
+    
+        if (!response.ok) { // Verifica se a resposta não está OK (status 2xx)
+          const errorText = await response.text(); // Tenta obter o texto do erro (pode ser HTML ou texto simples)
+          throw new Error(`Erro na requisição: ${response.status} - ${errorText}`); // Lança um erro com mais detalhes
+        }
+    
+        const data = await response.json(); // Tenta parsear a resposta como JSON (só se response.ok for true)
         setHistorico(data);
       } catch (error) {
         console.error('Erro ao buscar histórico:', error);
+        // Exiba uma mensagem de erro amigável para o usuário (ex: um alerta)
+        // alert("Ocorreu um erro ao carregar o histórico. Tente novamente mais tarde.");
       }
     };
 
@@ -54,7 +65,7 @@ const HistoricoTable = ({ userId, isAdmin }) => {
 
   const handleHistorico = async (medicao) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/medicoes/historico/${medicao.id}`);
+      const response = await fetch(`${API_URL}/medicoes/historico/${medicao.id}`);
       const data = await response.json();
       setHistoricoData(data);
       setShowHistoricoModal(true);
@@ -65,7 +76,7 @@ const HistoricoTable = ({ userId, isAdmin }) => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/medicoes/${editData.id}`, {
+      const response = await fetch(`${API_URL}/medicoes/${editData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -105,13 +116,13 @@ const HistoricoTable = ({ userId, isAdmin }) => {
     let url;
     switch (option) {
       case 'all':
-        url = `http://localhost:5000/api/export/all?format=${format}`;
+        url = `${API_URL}/export/all?format=${format}`;
         break;
       case 'current':
-        url = `http://localhost:5000/api/export/current?format=${format}`;
+        url = `${API_URL}/export/current?format=${format}`;
         break;
       case 'client':
-        url = `http://localhost:5000/api/export/client/${clientId}?format=${format}`;
+        url = `${API_URL}/export/client/${clientId}?format=${format}`;
         break;
       default:
         return;
@@ -213,7 +224,8 @@ const HistoricoTable = ({ userId, isAdmin }) => {
               ) : (
                 <>
                 <td class="btn-acao">
-                <button onClick={() => handleEdit(medicao)}>Adicionar Medida</button>
+                {/* <button onClick={() => handleEdit(medicao)}>Adicionar Medida</button> - ANTIGO MODAL EDIÇÃO*/}
+                <button onClick={() => navigate(`/medicao/${userId}`)}>Adicionar Medidas</button>
               </td>
                 </>
               )}

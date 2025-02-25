@@ -1,1 +1,50 @@
+.MaiorA_EPS, .MenorB_EPS {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px; /* Largura máxima do formulário */
+  }
+  
+  .MaiorA_EPS *, .MenorB_EPS * {
+    box-sizing: border-box; /* Aplica box-sizing a todos os elementos internos */
+  }
+  
+  .input-full-width {
+    width: 100%;
+  }
+  
+  .input-full-width label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .input-full-width input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .input-2col {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .input-2col label {
+    display: block;
+    margin-bottom: 5px;
+    flex: 1;
+  }
+  
+  .input-2col input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
 
+  .input-center {
+    width: 100%;
+    text-align-last: center;
+  }
