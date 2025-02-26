@@ -28,6 +28,7 @@ app.get('/api/medicoes/historico/:id', authController.getMedicaoHistorico);
 
 // Rota para atualizar visão cliente
 app.put('/api/medicoes/cliente/:id', authController.saveMedicaoCliente);
+app.put('/api/historico/cliente/:id', authController.updateMedicaoCliente);
 
 // Rota para atualizar uma medição
 app.put('/api/medicoes/:id', authController.updateMedicao);

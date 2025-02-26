@@ -2,8 +2,20 @@ import 'dotenv/config'; // Carregar variáveis de ambiente do arquivo .env
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-// import { parse as json2csv } from 'json2csv'; // Temporarily disable CSV export
+import { parse as json2csv } from 'json2csv';
 import { js2xml } from 'xml-js';
+
+const exportDataAsCSV = (data, fileName, res) => {
+  try {
+    const csv = json2csv(data); // Usando a função parse para gerar CSV
+    res.header('Content-Type', 'text/csv');
+    res.attachment(fileName);
+    res.send(csv);
+  } catch (error) {
+    console.error('Erro ao gerar CSV:', error);
+    res.status(500).send('Erro ao exportar dados em CSV.');
+  }
+};
 
 const authController = {
   // Função de login
@@ -155,17 +167,14 @@ const authController = {
     const format = req.query.format || 'json';
     try {
       const allData = await User.getAllData();
-      // Temporarily disable CSV export
-      // if (format === 'csv') {
-      //   const csv = json2csv(allData);
-      //   res.header('Content-Type', 'text/csv');
-      //   res.attachment('all_data.csv');
-      //   return res.send(csv);
-      // } else 
-      if (format === 'xml') {
+      
+      if (format === 'csv') {
+        const combinedData = [...allData.medicoes, ...allData.historico];
+        return exportDataAsCSV(combinedData, 'todas_medicoes.csv', res);
+      } else if (format === 'xml') {
         const xml = js2xml({ root: allData }, { compact: true, ignoreComment: true, spaces: 4 });
         res.header('Content-Type', 'application/xml');
-        res.attachment('all_data.xml');
+        res.attachment('todas_medicoes.xml');
         return res.send(xml);
       } else {
         res.json(allData);
@@ -180,17 +189,12 @@ const authController = {
     const format = req.query.format || 'json';
     try {
       const currentData = await User.getCurrentData();
-      // Temporarily disable CSV export
-      // if (format === 'csv') {
-      //   const csv = json2csv(currentData);
-      //   res.header('Content-Type', 'text/csv');
-      //   res.attachment('current_data.csv');
-      //   return res.send(csv);
-      // } else 
-      if (format === 'xml') {
+      if (format === 'csv') {
+        return exportDataAsCSV(currentData, 'medicoes_atuais.csv', res);
+      } else if (format === 'xml') {
         const xml = js2xml({ root: currentData }, { compact: true, ignoreComment: true, spaces: 4 });
         res.header('Content-Type', 'application/xml');
-        res.attachment('current_data.xml');
+        res.attachment('medicoes_atuais.xml');
         return res.send(xml);
       } else {
         res.json(currentData);
@@ -206,14 +210,10 @@ const authController = {
     const clientId = req.params.id;
     try {
       const clientData = await User.getClientData(clientId);
-      // CSV Desativado temporariamente
-      // if (format === 'csv') {
-      //   const csv = json2csv(clientData);
-      //   res.header('Content-Type', 'text/csv');
-      //   res.attachment(`client_${clientId}_data.csv`);
-      //   return res.send(csv);
-      // } else 
-      if (format === 'xml') {
+      if (format === 'csv') {
+        const combinedData = [...clientData.medicoes, ...clientData.historico];
+        return exportDataAsCSV(combinedData, `client_${clientId}_data.csv`, res);
+      } else if (format === 'xml') {
         const xml = js2xml({ root: clientData }, { compact: true, ignoreComment: true, spaces: 4 });
         res.header('Content-Type', 'application/xml');
         res.attachment(`client_${clientId}_data.xml`);
@@ -242,6 +242,20 @@ const authController = {
     } catch (error) {
       console.error('Erro ao salvar medição do cliente:', error);
       res.status(500).json({ message: 'Erro ao salvar medição do cliente. Por favor, tente novamente mais tarde.' });
+    }
+  },
+
+  //ATUALIZAR MEDIDAS CLIENTE
+  async updateMedicaoCliente(req, res) {
+    const medicaoId = req.params.id;
+    const updatedData = req.body;
+
+    try {
+      await User.updateMedicaoCliente(medicaoId, updatedData);
+      res.json({ message: 'Medição atualizada com sucesso' });
+    } catch (error) {
+      console.error('Erro ao atualizar medição:', error);
+      res.status(500).json({ error: 'Erro ao atualizar medição' });
     }
   }
 };

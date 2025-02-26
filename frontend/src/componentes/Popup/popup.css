@@ -14,8 +14,8 @@
 
 .popup {
   position: relative;
-  padding: 16px 24px;
-  border-radius: 12px;
+  padding: 20px 40px;
+  border-radius: 8px;
   color: white;
   font-weight: bold;
   z-index: 9999;

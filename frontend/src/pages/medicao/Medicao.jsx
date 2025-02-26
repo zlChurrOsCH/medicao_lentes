@@ -98,6 +98,12 @@ const Medicao = () => {
       return false;
     }
     
+    // Passa os dados para constante correta
+    const medicaoData = {
+      lenteAX_cliente, lenteAY_cliente, lenteBX_cliente, lenteBY_cliente, lente_a_x_eps, lente_a_y_eps, lente_b_x_eps,
+      lente_b_y_eps, toleranciaNum
+    };
+
     setPopup({ message: 'Parabéns! Seu leitor está validado.', type: 'success', visible: true });
     return true;
   };
@@ -122,7 +128,7 @@ const Medicao = () => {
 
   const updateMedicao = async (username, medicaoData) => {
     try {
-      await fetch(`${API_URL}/medicoes/${username}`, {
+      await fetch(`${API_URL}/historico/cliente/${username}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -146,14 +152,16 @@ const Medicao = () => {
 
   const closePopup = () => {
     setPopup({ ...popup, visible: false });
+    window.location.reload(); // Atualiza a página
   };
 
   return (
     <PageWrapper title="Medição">
       <div className="nav-bottom">
         <div className="cliente">{user ? "CÓDIGO DO CLIENTE: " + user.username : 'Não Conectado'}</div>
-      </div>
-      <h1>MEDIÇÕES</h1>
+      </div>  
+      <button className="back-btn" onClick={() => navigate('/perfil')}>Voltar</button>
+      <h1 className='title-page h1-title-page'>MEDIÇÕES</h1>
       <form onSubmit={handleSubmit} className="medicao-form">
         <div className="lente-block">
           <div className="lente">

@@ -21,7 +21,7 @@ const HistoricoModal = ({ historicoData, setShowHistoricoModal }) => {
             </tr>
           </thead>
           <tbody>
-            {historicoData.map((item, index) => (
+            {historicoData.slice().reverse().map((item, index) => (
               <tr key={index}>
                 <td>{formatDate(item.atualizado_em)}</td>
                 <td>Medida X: {item.lente_a_x_cliente_old}<br /> Medida Y: {item.lente_a_y_cliente_old}</td>

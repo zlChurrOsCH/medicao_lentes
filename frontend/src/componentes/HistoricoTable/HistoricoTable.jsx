@@ -41,9 +41,7 @@ const HistoricoTable = ({ userId, isAdmin }) => {
 
   const filteredHistorico = useMemo(() => {
     return historico.filter((medicao) =>
-      Object.values(medicao).some((value) =>
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      medicao.cliente_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [searchTerm, historico]);
 
@@ -76,7 +74,7 @@ const HistoricoTable = ({ userId, isAdmin }) => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`${API_URL}/medicoes/${editData.id}`, {
+      const response = await fetch(`${API_URL}/medicoes/${editData.cliente_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -146,11 +144,14 @@ const HistoricoTable = ({ userId, isAdmin }) => {
   
   const handleExport = () => {
     const option = prompt('Escolha uma opção: \n1. Exportar tudo \n2. Exportar Atuais \n3. Exportar cliente X');
-    const format = prompt('Escolha o formato: \n1. JSON \n2. XML');
+    const format = prompt('Escolha o formato: \n1. JSON \n2. XML \n3. CSV');
     let formatOption = 'json';
     if (format === '2') {
       formatOption = 'xml';
+    } else if (format === '3') {
+      formatOption = 'csv';
     }
+    
     if (option === '1') {
       exportData('all', formatOption);
     } else if (option === '2') {
@@ -167,7 +168,7 @@ const HistoricoTable = ({ userId, isAdmin }) => {
         <>
         <h3>Histórico de Medições</h3>
         <div className="header-actions">
-          <input type="text" className="search-input" placeholder="Pesquisar..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          <input type="text" className="search-input" placeholder="Código do cliente..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           <button className="export-button" onClick={handleExport}>Exportar Dados</button>
         </div>
         </>

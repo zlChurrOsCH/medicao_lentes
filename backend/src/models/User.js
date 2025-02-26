@@ -118,22 +118,73 @@ const updateMedicao = async (medicaoId, updatedData) => {
                 updatedData.lente_b_y_cliente, updatedData.armacao, updatedData.tolerancia, medicaoId
             ]
         );
+      console.log('📋 Dados antigos encontrados:', oldData);
 
         await connection.query(
             `INSERT INTO medicoes_historico (
-                medicao_id, lente_a_maior_old, lente_a_x_eps_old, lente_a_y_eps_old, 
+                medicao_id, cliente_id, lente_a_maior_old, lente_a_x_eps_old, lente_a_y_eps_old, 
                 lente_a_x_cliente_old, lente_a_y_cliente_old, lente_b_menor_old, 
                 lente_b_x_eps_old, lente_b_y_eps_old, lente_b_x_cliente_old, 
                 lente_b_y_cliente_old, armacao_old, tolerancia_old, atualizado_em
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 
             [
-                medicaoId, oldData[0].lente_a_maior, oldData[0].lente_a_x_eps, oldData[0].lente_a_y_eps,
+                oldData[0].id, oldData[0].cliente_id, oldData[0].lente_a_maior, oldData[0].lente_a_x_eps, oldData[0].lente_a_y_eps,
                 oldData[0].lente_a_x_cliente, oldData[0].lente_a_y_cliente, oldData[0].lente_b_menor,
                 oldData[0].lente_b_x_eps, oldData[0].lente_b_y_eps, oldData[0].lente_b_x_cliente,
                 oldData[0].lente_b_y_cliente, oldData[0].armacao, oldData[0].tolerancia, new Date()
             ]
         );
+
+        await connection.commit();
+    } catch (error) {
+        await connection.rollback();
+        console.error('Erro ao atualizar medição:', error);
+        throw error;
+    } finally {
+        connection.release();
+    }
+};
+
+// Função para atualizar uma medição e registrar as alterações
+const updateMedicaoCliente = async (medicaoId, updatedData) => {
+    const connection = await pool.getConnection();
+    try {      
+        await connection.beginTransaction();
+
+        const [oldData] = await connection.query('SELECT * FROM medicoes WHERE cliente_id = ?', [medicaoId]);
+      	if (oldData.length === 0) {
+          throw new Error('Medição não encontrada');
+        }
+
+        await connection.query(
+            `UPDATE medicoes SET 
+                lente_a_x_cliente = ?, lente_a_y_cliente = ?, lente_b_x_cliente = ?, 
+                lente_b_y_cliente = ?, atualizado_em = NOW() WHERE cliente_id = ?`,
+            [
+                updatedData.lenteA.x_cliente, updatedData.lenteA.y_cliente,
+                updatedData.lenteB.x_cliente, updatedData.lenteB.y_cliente,
+                medicaoId
+            ]
+        );
+      
+        await connection.query(
+            `INSERT INTO medicoes_historico (
+                medicao_id, cliente_id, lente_a_maior_old, lente_a_x_eps_old, lente_a_y_eps_old, 
+                lente_a_x_cliente_old, lente_a_y_cliente_old, lente_b_menor_old, 
+                lente_b_x_eps_old, lente_b_y_eps_old, lente_b_x_cliente_old, 
+                lente_b_y_cliente_old, armacao_old, tolerancia_old, atualizado_em
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+
+            [
+                oldData[0].id, oldData[0].cliente_id, oldData[0].lente_a_maior, oldData[0].lente_a_x_eps,
+              	oldData[0].lente_a_y_eps, oldData[0].lente_a_x_cliente, oldData[0].lente_a_y_cliente,
+                oldData[0].lente_b_menor, oldData[0].lente_b_x_eps, oldData[0].lente_b_y_eps,
+                oldData[0].lente_b_x_cliente, oldData[0].lente_b_y_cliente, oldData[0].armacao,
+                oldData[0].tolerancia, new Date()
+            ]
+        );
+      	
 
         await connection.commit();
     } catch (error) {
@@ -240,6 +291,7 @@ const User = {
     getMedicaoHistorico,
     saveMedicao,
     saveMedicaoCliente,
+    updateMedicaoCliente,
     getAllData,
     getCurrentData,
     getClientData
